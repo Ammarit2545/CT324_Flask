@@ -1,7 +1,6 @@
 import paho.mqtt.client as mqttclient
 import time
-from flask import Flask, render_template
-
+from flask import Flask, render_template, jsonify
 import mysql.connector
 
 app = Flask(__name__)
@@ -54,7 +53,7 @@ def index():
 led_state = "off"  # Initial LED state
 
 @app.route('/publish')
-def publish_led_off():
+def publish_led():
     global led_state  # Access the global variable to track LED state
 
     # Toggle the LED state
@@ -68,6 +67,16 @@ def publish_led_off():
     # Publish the MQTT message
     client.publish("/LIGHT", message)
 
+    # Insert data into the MySQL database
+    try:
+        insert_query = "INSERT INTO led_status (l_status, L_date_in) VALUES (%s, NOW())"
+        data = (led_state,)
+        db_cursor.execute(insert_query, data)
+        db_connection.commit()
+        print("Data inserted into MySQL database successfully.")
+    except Exception as e:
+        print(f"Error inserting data into MySQL database: {e}")
+
     return f"Data sent to MQTT (LED state: {led_state})"
 
 # Define a callback function for receiving MQTT messages
@@ -77,15 +86,10 @@ def on_mqtt_message(client, userdata, message):
     # Extract the message payload
     mqtt_data = message.payload.decode()
 
-    # Insert data into the MySQL database
-    try:
-        insert_query = "INSERT INTO led_status (l_status, L_date_in) VALUES (%s, NOW())"
-        data = (mqtt_data,)
-        db_cursor.execute(insert_query, data)
-        db_connection.commit()
-        print("Data inserted into MySQL database successfully.")
-    except Exception as e:
-        print(f"Error inserting data into MySQL database: {e}")
+@app.route('/subscribe')
+def subscribe_mqtt_data():
+    global mqtt_data
+    return jsonify({"light": mqtt_data})  # Return {"light": "90"} as JSON
 
 # Set the callback function for the /SENSOR topic
 client.subscribe("/SENSOR")
