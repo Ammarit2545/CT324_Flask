@@ -1,9 +1,11 @@
+from flask import Flask, render_template, jsonify, request
+from flask_socketio import SocketIO, emit
+import mysql.connector
 import paho.mqtt.client as mqttclient
 import time
-from flask import Flask, render_template, jsonify
-import mysql.connector
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
+socketio = SocketIO(app)
 
 # Define your MySQL database configuration
 db_config = {
@@ -18,18 +20,26 @@ db_config = {
 db_connection = mysql.connector.connect(**db_config)
 db_cursor = db_connection.cursor()
 
+# Initialize mqtt_data as a global variable
+mqtt_data = ""
+
+
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Client is Connected")
         global connected
         connected = True
-        client.subscribe("/ARMTEST")  # Subscribe to the "/ARMTEST" topic when connected
+        # Subscribe to the "/ARMTEST" topic when connected
+        client.subscribe("/ARMTEST")
         client.subscribe("/LIGHT")  # Subscribe to the "/LIGHT" topic
     else:
         print("Connection Failed")
 
+
 def on_message(client, userdata, message):
-    print(f"Received message '{message.payload.decode()}' on topic '{message.topic}'")
+    print(
+        f"Received message '{message.payload.decode()}' on topic '{message.topic}'")
+
 
 connected = False
 broker_address = "10.22.5.149"
@@ -46,11 +56,24 @@ client.loop_start()
 while not connected:
     time.sleep(0.2)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/main')
+def main_page():
+    return render_template('main.html')
+
+
+@socketio.on('connect')
+def handle_connect():
+    # This function is called when a client connects to the WebSocket
+    print('Client connected')
+
+
 led_state = "off"  # Initial LED state
+
 
 @app.route('/publish')
 def publish_led():
@@ -86,14 +109,72 @@ def on_mqtt_message(client, userdata, message):
     # Extract the message payload
     mqtt_data = message.payload.decode()
 
+    # Split the message payload into a key-value pair
+    try:
+        data = json.loads(mqtt_data)
+        key = "Sensor"
+        value = data.get(key)
+    except json.JSONDecodeError as e:
+        # Handle JSON parsing errors
+        print(f"Error parsing MQTT data: {e}")
+        return
+
+    # Emit the MQTT data to all WebSocket clients
+    socketio.emit('mqtt_data', {'key': key, 'value': value})
+
+
+# Create a connection to the MySQL database
+db_connection = mysql.connector.connect(**db_config)
+db_cursor = db_connection.cursor()
+
+# ... Your previous code ...
+
+@app.route('/insert_data', methods=['POST'])
+def insert_data():
+    try:
+        sensor_value1 = request.form.get('sensor_value1')
+        lux = request.form.get('lux')
+
+        # Insert data into the database
+        insert_query = "INSERT INTO led_status (l_status, L_date_in) VALUES (%s, NOW())"
+        data = (lux,)
+
+        db_cursor.execute(insert_query, data)
+        db_connection.commit()
+
+        return "Data inserted successfully.", 200
+    except Exception as e:
+        return f"Error: {str(e)}", 500
+
+
 @app.route('/subscribe')
 def subscribe_mqtt_data():
     global mqtt_data
-    return jsonify({"light": mqtt_data})  # Return {"light": "90"} as JSON
 
-# Set the callback function for the /SENSOR topic
-client.subscribe("/SENSOR")
-client.on_message = on_mqtt_message
+    # Get the MQTT data from the global variable
+    mqtt_payload = mqtt_data
+
+    # Check if there is MQTT data available
+    if mqtt_payload:
+        try:
+            # Parse the MQTT data into key-value pairs
+            key, value = mqtt_payload.split(':')
+
+            # Insert the data into the database
+            insert_query = "INSERT INTO data_detail (d_val_1, d_date_in) VALUES (%s, NOW())"
+            data = (value,)
+            db_cursor.execute(insert_query, data)
+            db_connection.commit()
+
+            # Return a response indicating success
+            return jsonify({"message": "Data inserted successfully."})
+        except Exception as e:
+            # Handle any errors that may occur during insertion
+            return jsonify({"error": str(e)}), 500
+    else:
+        # Handle the case when there is no MQTT data available
+        return jsonify({"message": "No MQTT data available."})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)
+    app.run(host='0.0.0.0', port=5000)

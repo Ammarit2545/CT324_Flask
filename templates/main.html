@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Main Page</title>
+
+    <!-- Include external CSS files -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/vendor/aos/aos.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/vendor/bootstrap/css/bootstrap.min.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/style.css') }}"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='assets/img/favicon.png') }}"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='assets/img/apple-touch-icon.png') }}"
+    />
+
+    <!-- Favicons -->
+    <!-- <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/img/favicon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/img/apple-touch-icon.png') }}"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <!-- <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> -->
+
+    <!-- =======================================================
+  * Template Name: iPortfolio
+  * Updated: Jul 27 2023 with Bootstrap v5.3.1
+  * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+    <style>
+      .container1 {
+        width: 1000px;
+      }
+
+      .card {
+        border: 1px solid #ff0000;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: center;
+      }
+
+      #sensorValueLive,
+      .value {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        display: inline;
+      }
+
+      .date {
+        font-size: 18px;
+        color: #ff0000;
+        display: inline;
+      }
+
+      #sensorValueLiveDate,
+      #sensorValueLive {
+        display: inline;
+      }
+
+      .active {
+        display: inline;
+      }
+
+      /* Add these styles to your existing CSS */
+      .dot-container {
+        display: inline-flex;
+        /* Display children in a row */
+        align-items: center;
+        /* Center vertically within the container */
+        gap: 10px;
+        /* Space between the dot and date */
+      }
+
+      .dot {
+        width: 20px;
+        height: 20px;
+        background-color: rgb(29, 255, 29);
+        border-radius: 50%;
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      /* Add these styles to your existing CSS */
+      .reddot-container {
+        display: inline-flex;
+        /* Display children in a row */
+        align-items: center;
+        /* Center vertically within the container */
+        gap: 10px;
+        /* Space between the dot and date */
+      }
+
+      .reddot {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      #OnlineBoard,
+      #OfflineBoard {
+        display: none;
+      }
+
+      .OfflineButton {
+        color: red;
+        text-decoration: none;
+      }
+
+      .OfflineButton:hover {
+        color: #888;
+        text-decoration: none;
+      }
+
+      /* Styles for the switch */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #2196f3;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196f3;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      /* Hide the input */
+      input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ======= Mobile nav toggle button ======= -->
+    <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
+
+    <!-- ======= Header ======= -->
+    <header id="header">
+      <div class="d-flex flex-column">
+        <div class="profile">
+          <img
+            src="{{ url_for('static', filename='img/100.jpg') }}"
+            alt=""
+            class="img-fluid rounded-circle"
+          />
+          <h1 class="text-light">
+            <a href="index.html">MiniProject - CT.324</a>
+          </h1>
+          <!-- <div class="social-links mt-3 text-center">
+            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+          </div> -->
+        </div>
+        <style>
+          /* Styles for the navigation bar */
+          .navbar {
+            text-align: left; /* Align text to the start */
+            padding: 10px 20px; /* Add horizontal padding */
+          }
+
+          .navbar ul {
+            list-style: none;
+            padding: 0;
+          }
+
+          .navbar li {
+            display: inline;
+            margin-right: 20px;
+          }
+
+          .nav-link {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s;
+          }
+
+          .nav-link:hover {
+            color: #007bff;
+          }
+
+          /* Icon styles */
+          .nav-link i {
+            margin-right: 5px;
+          }
+        </style>
+        <div class="navbar">
+          <ul>
+            <br />
+            <li>
+              <a href="#hero" class="nav-link scrollto active"
+                ><i class="bx bx-home"></i> <span>Home</span></a
+              >
+            </li>
+            <br /><br />
+            <li>
+              <a href="#about" class="nav-link scrollto"
+                ><i class="bx bx-server"></i> <span>UARTและI2Cคืออะไร</span></a
+              >
+            </li>
+            <li>
+              <a href="#resume" class="nav-link scrollto"
+                ><i class="bx bx-file-blank"></i>
+                <span>ข้อดีและข้อเสียUART/I2C</span></a
+              >
+            </li>
+            <li>
+              <a href="#portfolio" class="nav-link scrollto"
+                ><i class="bx bx-book-content"></i> <span>สรุป</span></a
+              >
+            </li>
+            <li>
+              <a href="#services" class="nav-link scrollto"
+                ><i class="bx bx-user"></i> <span>ผู้จัดทำ</span></a
+              >
+            </li>
+            <li>
+              <a href="#contact" class="nav-link scrollto"
+                ><i class="bx bx-envelope"></i> <span>อาจารย์ที่ปรึกษา</span></a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- <nav id="navbar" class="nav-menu navbar"></nav> -->
+        <!-- .nav-menu -->
+      </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- ======= Hero Section ======= -->
+    <section
+      id="hero"
+      class="d-flex flex-column justify-content-center align-items-center"
+      style="background-image: url('../static/img/548.jpg')"
+    >
+   
+      <div class="hero-container" data-aos="fade-in">
+        <h1 style="color: rgb(221, 146, 33)">CT.324</h1>
+        <p style="color: white">
+          <span
+            class="typed"
+            data-typed-items="MiniProject,LastProject of - CT . 324"
+            style="color: white"
+          ></span>
+        </p>
+        <div class="container1">
+          <div class="row">
+            <br />
+            <br />
+            <!-- <button onclick="publishData()">Toggle LED</button> -->
+            <center>
+              <br />
+
+              <!-- ... Your HTML body content ... -->
+              <center>
+                <h1>Sensor : <span id="MqttData">-</span> ohm</h1>
+              </center>
+              <!-- ... Rest of your HTML ... -->
+
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+              <script>
+                // Create a WebSocket connection to the server
+                const socket = io.connect(
+                  "http://" + document.domain + ":" + location.port
+                );
+
+                socket.on("connect", function () {
+                  console.log("Connected to server via WebSocket");
+                });
+
+                socket.on("mqtt_data", function (data) {
+                  // Update the MQTT data in real-time
+                  document.getElementById(
+                    "MqttData"
+                  ).textContent = `Sensor: ${data.Sensor}`;
+                });
+              </script>
+
+              <br />
+            </center>
+            <br />
+            <hr />
+            <br />
+            <center>
+              <label class="switch">
+                <input type="checkbox" id="LedSwitch" onclick="publishData()" />
+                <!-- Set the initial value to "0" -->
+                <span class="slider"></span>
+              </label>
+              <br />
+              <br />
+              <p>LED State: <span id="ledState" style="color: rgb(255, 198, 132);">Unknown</span></p>
+            </center>
+
+            <script>
+              $(document).ready(function () {
+                $("#LedSwitch").on("change", function () {
+                  var newState = $(this).val() === "1" ? "0" : "1"; // Toggle the state
+
+                  // Update the input's value to the new state
+                  $(this).val(newState);
+                });
+              });
+            </script>
+
+            <!-- Bootstrap JS and jQuery (optional) -->
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+            <!-- Add Bootstrap JavaScript (CDN or local) -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+
+            <script>
+              function publishData() {
+                fetch("/publish")
+                  .then((response) => response.text())
+                  .then((data) => {
+                    console.log(data);
+                    document.getElementById("ledState").textContent = data;
+                  })
+                  .catch((error) => console.error("ข้อผิดพลาด:", error));
+              }
+            </script>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Hero -->
+
+    <!-- Bootstrap JS and jQuery (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Add Bootstrap JavaScript (CDN or local) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Your custom JavaScript code -->
+    <script>
+      $(document).ready(function () {
+        $("#LedSwitch").on("change", function () {
+          var newState = $(this).val() === "0" ? "1" : "0"; // Toggle the state
+
+          // Update the input's value to the new state
+          $(this).val(newState);
+
+          // Send an AJAX request to your PHP script
+          $.ajax({
+            type: "POST",
+            url: "action/insert_switch.php",
+            data: {
+              newState: newState, // Include the new state
+            },
+            success: function (response) {
+              // Handle the response if needed
+              console.log(response);
+            },
+            error: function () {
+              // Handle any errors here
+            },
+          });
+        });
+      });
+    </script>
+
+    <main id="main">
+      <!-- ======= About Section ======= -->
+      <section id="about" class="about">
+        <div class="container">
+          <div class="section-title">
+            <h2>UARTและI2Cคืออะไร</h2>
+            <p>
+              UART (Universal Asynchronous Receiver/Transmitter) และ I2C
+              (Inter-Integrated Circuit)
+              เป็นสองโปรโตคอลสื่อสารที่ใช้ในการเชื่อมต่ออุปกรณ์อิเล็กทรอนิกส์กัน
+              แต่มีคุณสมบัติและข้อดีข้อเสียที่แตกต่างกันตามลักษณะของการใช้งานและความต้องการของโปรเจค
+              เรามาดูข้อดีและข้อเสียของทั้ง UARTและ I2C
+            </p>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4" data-aos="fade-right">
+              <img
+                src="{{ url_for('static', filename='img/4.jpg') }}"
+                class="img-fluid"
+                alt=""
+              />
+            </div>
+
+            <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+              <h3>UART/I2C</h3>
+              <p class="fst-italic">
+                I²C ย่อมาจาก Inter Integrate Circuit (IIC) แต่นิยมเรียกว่า I²C
+                มากกว่า เป็นการสื่อสารอนุกรมแบบ synchronous
+                เพื่อใช้สื่อสารข้อมูลระหว่างอุปกรณ์ความเร็วต่ำI²C
+                มีความโดดเด่นที่การเชื่อมต่อกันเป็นระบบบัสแบบรับและส่งข้อมูล
+                ซึ่งสามารถเชื่อมต่อกับอุปกรณ์จำนวนมากได้โดยใช้สายเพียงแค่ 2 เส้น
+                ทำให้ลดจำนวนของสายไฟและขนาดของอุปกรณ์ไปได้
+                จึงทำให้เป็นการสื่อสารที่นิยมสำหรับระบบฝังตัว(embedded
+                system)ขนาดเล็ก
+                <br />UART หรือชื่อเต็ม Universal Asynchronous Receiver and
+                Transmitter เป็นการสื่อสารข้อมูลผ่านพอร์ตอนุกรมแบบอะซิงโครนัส
+                (asynchronous serial communication) ระหว่างอุปกรณ์ต่าง ๆ
+                ซึ่งนิยมใช้เป็นการสื่อสารระหว่างไมโครคอนโทรลเลอร์ด้วยกัน
+              </p>
+              <h1 style="color: #173b6c">การสื่อสารแบบอนุกรม</h1>
+              <p class="fst-italic">
+                คือการใช้สาย 1 เส้นรับ-ส่งข้อมูลแบบต่อเนื่อง โดยอาศัยเทคนิคต่าง
+                ๆ ในการสื่อสาร เช่นการใช้สัญญาณทริกเพื่อรับข้อมูลเข้า
+                การใช้บิตเริ่มต้นกำหนดการรับข้อมูล
+                โดยอาจจะอาศัยและไม่อาศัยเวลาในการทำงาน
+                ทั้งนี้การสื่อสารแบบอนุกรมสามารถแบ่งได้เป็น 2 รูปแบบคือ
+              </p>
+              <p>
+                แบบซิงโคนัส (Synchronous) –
+                เป็นการสื่อสารที่ใช้สายสัญญาณข้อมูลอย่างน้อย 1 เส้น และมีสายอีก
+                1 เส้นกำหนดจังหวะการรับข้อมูล
+                ข้อดีของการสื่อสารแบบนี้คือการรับส่งข้อมูลมีความผิดพลาดน้อยหรือไม่มีความผิดพลาดเลย
+                แต่ข้อเสียคือต้องใช้สายสัญญาณอย่างน้อย 2 เส้นในการสื่อสาร
+                โดยโปรโตคอลที่ทำงานแบบซิงโคนัสได้แก่ I2C I2S และ SPI
+              </p>
+              <p>
+                แบบอะซิงโคนัส (Asynchronous) –
+                เป็นการสื่อสารที่ใช้สายสัญญาณข้อมูลเพียงเส้นเดียวในการทำงาน
+                โดยอาศัยสัญญาณจากบิตเริ่มต้น
+                และบิตสิ่นสุดในการบอกจังหวะการรับส่งข้อมูล
+                การสื่อสารแบบนี้จำเป็นต้องอาศัยเวลามาเป็นตัวกำหนดการรับสัญญาณเข้ามาซึ่งหากมีการตั้งค่าที่ผิดจะทำให้อ่านข้อมูลที่ส่งมาได้ผิดพลาด
+                ข้อดีของการสื่อสารแบบนี้คือใช้สายสัญญาณเพียง 1
+                เส้นก็สามารถรับ-ส่งข้อมูลได้แล้ว
+                แต่ข้อเสียคือมีความผิดพลาดในการสื่อสารได้ง่าย
+                โดยโปรโตคอลที่ทำงานแบบอะซิงโคนัสคือ UART
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End About Section -->
+
+      <!-- ======= Resume Section ======= -->
+      <section id="resume" class="resume">
+        <div class="container">
+          <div class="section-title">
+            <h2>ข้อดีและข้อเสียUART/I2C</h2>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6" data-aos="fade-up">
+              <h3 class="resume-title">
+                UART (Universal Asynchronous Receiver/Transmitter)
+              </h3>
+              <div class="resume-item pb-0">
+                <h4>ข้อดี UART</h4>
+                <p><em>ข้อดีและข้อเสียมีดังนี้</em></p>
+                <ul>
+                  <li>
+                    1.ง่ายต่อการใช้งาน : มีการสื่อสารแบบซีเรียลแบบง่าย
+                    ที่สามารถใช้งานได้ง่ายและทั่วไปในหลายแพลตฟอร์ม.
+                  </li>
+                  <li>
+                    2.มีความเร็วสูง: UART
+                    สามารถทำงานในความเร็วสูงได้และมีความเร็วเฉลี่ยสูงกว่า I2C.
+                  </li>
+                  <li>
+                    3.ไม่ต้องมีอุปกรณ์ควบคุมเส้นสัญญาณเพิ่มเติม: UART
+                    ใช้สัญญาณเส้นเดียวเท่านั้น (TX - ส่ง, RX - รับ)
+                    และไม่จำเป็นต้องมีอุปกรณ์ควบคุมสัญญาณเพิ่มเติม เช่น pull-up
+                    resistor หรือสัญญาณคล็อกต่าง ๆ
+                  </li>
+                </ul>
+              </div>
+
+              <div class="resume-item">
+                <h4>ข้อเสีย UART</h4>
+                1.ไม่สามารถใช้งานแบบแทรกเพิ่มเติมได้: UART ไม่สามารถใช้งานแบบ
+                multi-master หรือแทรกข้อมูลเพิ่มเติมในช่วงการสื่อสารได้ง่าย ๆ
+                อย่าง I2C.
+              </div>
+              <div class="resume-item">
+                2.ไม่มีตัวตรวจสอบข้อผิดพลาด: UART ไม่มีตัวตรวจสอบข้อผิดพลาด
+                (error-checking) ที่มีความแม่นยำเท่ากับ I2C
+                ซึ่งอาจทำให้มีความเสี่ยงในการสูญเสียข้อมูลในบางกรณี.
+              </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+              <h3 class="resume-title">I2C (Inter-Integrated Circuit)</h3>
+              <div class="resume-item">
+                <h4>ข้อดี I2C</h4>
+                <p><em>ข้อดีและข้อเสียมีดังนี้</em></p>
+
+                <ul>
+                  <li>
+                    1.สามารถใช้งานแบบแทรกเพิ่มเติมได้: I2C สามารถใช้งานในโหมด
+                    multi-master
+                    และสามารถแทรกข้อมูลเพิ่มเติมในช่วงการสื่อสารได้ง่าย ๆ
+                    ซึ่งเหมาะสำหรับการสื่อสารระหว่างหลายอุปกรณ์.
+                  </li>
+                  <li>
+                    2.มีการตรวจสอบข้อผิดพลาด: I2C มีตัวตรวจสอบข้อผิดพลาด
+                    (error-checking)
+                    ที่ช่วยในการตรวจสอบความถูกต้องของข้อมูลที่ถูกส่งและรับ.
+                  </li>
+                  <li>
+                    3.ใช้สายสัญญาณเดียวสำหรับการสื่อสาร: I2C
+                    ใช้สายสัญญาณเดียวสำหรับการสื่อสาร (สายข้อมูลเดียว,
+                    สายคล็อกเดียว) ซึ่งช่วยลดจำนวนสายที่ต้องใช้.
+                  </li>
+                </ul>
+              </div>
+              <div class="resume-item">
+                <h4>ข้อสีย I2C</h4>
+                <ul>
+                  <li>
+                    1.ความเร็วต่ำกว่า: I2C มีความเร็วที่ต่ำกว่า UART
+                    และไม่เหมาะสำหรับการสื่อสารที่ต้องการความเร็วสูง.
+                  </li>
+                  <li>
+                    2.จำนวนสายที่ใช้มากกว่า: I2C ใช้สายสัญญาณเพิ่มเติม
+                    (สายข้อมูลและสายคล็อก)
+                    ซึ่งทำให้มีการใช้สายที่มากกว่าในการเชื่อมต่อ.
+                  </li>
+                </ul>
+                <h4>ข้อแนะนำ</h4>
+                <p>
+                  การเลือกใช้ UART หรือ I2C
+                  ขึ้นอยู่กับความต้องการของโปรเจคของคุณ
+                  ถ้าคุณต้องการความเร็วสูงและการใช้งานง่าย UART
+                  อาจเป็นตัวเลือกที่ดี
+                  แต่ถ้าคุณต้องการความแม่นยำและความสามารถในการสื่อสาร I2C
+                  ก็อาจจะเป็นอีกทางเลือกนึง
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Resume Section -->
+
+      <!-- ======= Portfolio Section ======= -->
+      <section id="portfolio" class="portfolio section-bg">
+        <div class="container">
+          <div class="section-title">
+            <h2>สรุป</h2>
+            <p>
+              ต้องการความเร็วสูงและการใช้งานง่าย ให้ไปใช้ UART
+              แต่ถ้าต้องการความแม่นยำและความสามารถในการสื่อสารแบบแทรกเพิ่มเติม
+              I2C อาจเหมาะมากกว่า.
+            </p>
+          </div>
+
+          <div class="row" data-aos="fade-up">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <ul id="portfolio-flters">
+                <li data-filter="*" class="filter-active">All</li>
+                <li data-filter=".filter-app">UART</li>
+                <li data-filter=".filter-card">I2C</li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            class="row portfolio-container"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+              <div class="portfolio-wrap">
+                <img
+                  src="{{ url_for('static', filename='assets/img/89.jpg') }}"
+                  class="img-fluid"
+                  alt=""
+                />
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+              <div class="portfolio-wrap">
+                <img
+                  src="{{ url_for('static', filename='assets/img/90.jpg') }}"
+                  class="img-fluid"
+                  alt=""
+                />
+                <div class="portfolio-links"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+              <div class="portfolio-wrap">
+                <img
+                  src="{{ url_for('static', filename='assets/img/92.jpg') }}"
+                  class="img-fluid"
+                  alt=""
+                />
+                <div class="portfolio-links"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+              <div class="portfolio-wrap">
+                <img
+                  src="{{ url_for('static', filename='assets/img/91.jpg') }}"
+                  class="img-fluid"
+                  alt=""
+                />
+                <div class="portfolio-links"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+              <div class="portfolio-wrap">
+                <img
+                  src="{{ url_for('static', filename='assets/img/93.jpg') }}"
+                  class="img-fluid"
+                  alt=""
+                />
+                <div class="portfolio-links"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+              <div class="portfolio-wrap">
+                <img
+                  src="{{ url_for('static', filename='assets/img/94.jpg') }}"
+                  class="img-fluid"
+                  alt=""
+                />
+                <div class="portfolio-links"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Portfolio Section -->
+
+      <!-- ======= ผู้จัดทำ Services Section ======= -->
+      <section id="services" class="services">
+        <div class="container2">
+          <h1 class="header"><span style="color: #173b6c">Team</span></h1>
+          <p class="sub-text">คณะผู้จัดทำ</p>
+          <div class="row">
+            <div class="col s12 m6 l4">
+              <div
+                style="text-align: center"
+                class="single-service center-align"
+              >
+                <div class="img-area">
+                  <img
+                    alt=""
+                    src="{{ url_for('static', filename='img/99.jpg') }}"
+                  />
+                </div>
+                <h2>TEERADET</h2>
+                <h4>Web Developer</h4>
+                <p>FrontEnd Developers</p>
+                <p class="socials">
+                  <i class="fa fa-instagram"></i>
+                  <i class="fa fa-dribbble"></i> <i class="fa fa-tumblr"></i>
+                  <i class="fa fa-youtube"></i>
+                </p>
+              </div>
+            </div>
+            <div class="col s12 m6 l4">
+              <div
+                style="text-align: center"
+                class="single-service center-align"
+              >
+                <div class="img-area">
+                  <img
+                    alt=""
+                    src="{{ url_for('static', filename='img/da.jpg') }}"
+                  />
+                </div>
+                <h2>WARATCHAYA</h2>
+                <h4>Graphics Designer</h4>
+                <p>Information Procurement Department - ผู้จัดหาข้อมูล</p>
+                <p class="socials">
+                  <i class="fa fa-instagram"></i>
+                  <i class="fa fa-dribbble"></i> <i class="fa fa-tumblr"></i>
+                  <i class="fa fa-youtube"></i>
+                </p>
+              </div>
+            </div>
+
+            <div class="col s12 m6 l4">
+              <div
+                style="text-align: center"
+                class="single-service center-align"
+              >
+                <div class="img-area">
+                  <img
+                    alt=""
+                    src="{{ url_for('static', filename='img/96.jpg') }}"
+                  />
+                </div>
+                <h2>SIPPAKON</h2>
+                <h4>DATA</h4>
+                <p>Web Server</p>
+                <p class="socials">
+                  <i class="fa fa-instagram"></i>
+                  <i class="fa fa-dribbble"></i> <i class="fa fa-tumblr"></i>
+                  <i class="fa fa-youtube"></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container2">
+          <div class="row">
+            <div class="col s12 m6 l4">
+              <div
+                style="text-align: center"
+                class="single-service center-align"
+              >
+                <div class="img-area">
+                  <img
+                    alt=""
+                    src="{{ url_for('static', filename='img/98.jpg') }}"
+                  />
+                </div>
+                <h2>AMMARIT</h2>
+                <h4>Web Developer</h4>
+                <p>Manager ,UX/UI ,System Design</p>
+                <p class="socials">
+                  <i class="fa fa-instagram"></i>
+                  <i class="fa fa-dribbble"></i> <i class="fa fa-tumblr"></i>
+                  <i class="fa fa-youtube"></i>
+                </p>
+              </div>
+            </div>
+            <div class="col s12 m6 l4">
+              <div
+                style="text-align: center"
+                class="single-service center-align"
+              >
+                <div class="img-area">
+                  <img
+                    alt=""
+                    src="{{ url_for('static', filename='img/97.jpg') }}"
+                  />
+                </div>
+                <h2>SARAWUT</h2>
+                <h4>Graphics Designer</h4>
+                <p>Web Design</p>
+                <p class="socials"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End ผู้จัดทำ Services Section -->
+
+      <!-- ======= Contact Section ======= -->
+      <section id="contact" class="contact">
+        <div class="container">
+          <div class="section-title">
+            <h2>อาจารย์ที่ปรึกษา</h2>
+            <p>ผู้ให้ความรู้และคำแนะนำในการทำงาน</p>
+          </div>
+
+          <div class="row" data-aos="fade-in">
+            <div class="col-lg-5 d-flex align-items-stretch">
+              <div class="info">
+                <div class="info-item">
+                  <div class="image-container">
+                    <img
+                      src="{{ url_for('static', filename='img/101.jpg') }}"
+                      alt="อาจารย์ ณฤทธิ์ ญังธนิศรา"
+                      style="border: 0; border-radius: 20%; width: 90%"
+                    />
+                  </div>
+                  <center>
+                    <h3>อาจารย์ ณฤทธิ์ ญังธนิศรา</h3>
+                  </center>
+                </div>
+                <div class="info-item">
+                  <div class="image-container">
+                    <img
+                      src="{{ url_for('static', filename='img/102.jpg') }}"
+                      alt="อาจารย์ หิน"
+                      style="border: 0; border-radius: 20%; width: 90%"
+                    />
+                  </div>
+                  <center>
+                    <h3>อาจารย์ หิน</h3>
+                  </center>
+                </div>
+                <div class="info-item">
+                  <div class="image-container">
+                    <img
+                      src="{{ url_for('static', filename='img/103.jpg') }}"
+                      alt="อาจารย์ เบนท์"
+                      style="border: 0; border-radius: 20%; width: 90%"
+                    />
+                  </div>
+                  <center>
+                    <h3>อาจารย์ เบนท์</h3>
+                  </center>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
+              <form action="" method="post" role="form" class="php-email-form">
+                <div class="row">
+                  <section id="skills" class="skills section-bg">
+                    <div class="container">
+                      <div class="section-title">
+                        <h2>ภาษาที่ใช้ทำ</h2>
+                        <p></p>
+                      </div>
+                      <div class="row skills-content">
+                        <div class="col-lg-6" data-aos="fade-up">
+                          <div class="progress">
+                            <span class="skill"
+                              >HTML <i class="val">100%</i></span
+                            >
+                            <div class="progress-bar-wrap">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="100"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="progress">
+                            <span class="skill"
+                              >CSS <i class="val">90%</i></span
+                            >
+                            <div class="progress-bar-wrap">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="90"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="progress">
+                            <span class="skill"
+                              >JavaScript <i class="val">75%</i></span
+                            >
+                            <div class="progress-bar-wrap">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="75"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="col-lg-6"
+                          data-aos="fade-up"
+                          data-aos-delay="100"
+                        >
+                          <div class="progress">
+                            <span class="skill"
+                              >PHP <i class="val">80%</i></span
+                            >
+                            <div class="progress-bar-wrap">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="80"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="progress">
+                            <span class="skill"
+                              >WordPress/CMS <i class="val">90%</i></span
+                            >
+                            <div class="progress-bar-wrap">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="90"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="progress">
+                            <span class="skill"
+                              >Photoshop <i class="val">55%</i></span
+                            >
+                            <div class="progress-bar-wrap">
+                              <div
+                                class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="55"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Contact Section -->
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+      <div class="container">
+        <div class="copyright">
+          &copy;KBU<strong><span>Romklao</span></strong>
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
+          CopyRight<a href="https://bootstrapmade.com/">2023</a>
+        </div>
+      </div>
+    </footer>
+    <!-- End  Footer -->
+
+    <a
+      href="#"
+      class="back-to-top d-flex align-items-center justify-content-center"
+      ><i class="bi bi-arrow-up-short"></i
+    ></a>
+
+    <!-- Vendor JS Files -->
+    <script src="{{ url_for('static', filename='assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/typed.js/typed.umd.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/waypoints/noframework.waypoints.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/php-email-form/validate.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+  </body>
+</html>

@@ -79,31 +79,29 @@
     <h1>ตัวอย่างปุ่ม MQTT</h1>
     <br />
 
-    <!-- # In your HTML file (index.html), you can display the MQTT data as follows: -->
-    <h1><span id="MqttData"></span></h1>
+    <!-- ... Your HTML body content ... -->
+    <center>
+      <h1>MQTT Data: <span id="MqttData"></span></h1>
+    </center>
+    <!-- ... Rest of your HTML ... -->
 
-    <!-- # Add this JavaScript code to your HTML file to update the displayed data: -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
     <script>
-      function subscribeData() {
-        fetch("/subscribe")
-          .then((response) => {
-            if (response.ok) {
-              return response.text();
-            } else {
-              throw new Error("Network response was not ok");
-            }
-          })
-          .then((datas) => {
-            console.log(data);
-            document.getElementById("MqttData").textContent = `Light: ${data}%`;
-          })
-          .catch((error) => {
-            console.error("ข้อผิดพลาด:", error);
-          });
-      }
-      // Call the subscribeData function to update the data initially and then periodically
-      subscribeData();
-      setInterval(subscribeData, 5000); // Update data every 5 seconds
+      // Create a WebSocket connection to the server
+      const socket = io.connect(
+        "http://" + document.domain + ":" + location.port
+      );
+
+      socket.on("connect", function () {
+        console.log("Connected to server via WebSocket");
+      });
+
+      socket.on("mqtt_data", function (data) {
+        // Update the MQTT data in real-time
+        document.getElementById(
+          "MqttData"
+        ).textContent = `Sensor: ${data.Sensor}`;
+      });
     </script>
 
     <br />
@@ -117,8 +115,8 @@
       <!-- Set the initial value to "0" -->
       <span class="slider"></span>
     </label>
-    <br>
-    <br>
+    <br />
+    <br />
     <p>LED State: <span id="ledState">Unknown</span></p>
   </center>
 
@@ -140,6 +138,8 @@
 
   <!-- Add Bootstrap JavaScript (CDN or local) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
 
   <script>
     function publishData() {
