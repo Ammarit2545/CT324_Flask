@@ -1,0 +1,155 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CT.324 - Looking Page</title>
+  <!-- Add Bootstrap CSS (CDN or local) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="css/index.css" />
+  <style>
+    /* Styles for the switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #2196f3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196f3;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    /* Hide the input */
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  </style>
+</head>
+<body>
+  <br />
+  <br />
+  <!-- <button onclick="publishData()">Toggle LED</button> -->
+  <center>
+    <h1>ตัวอย่างปุ่ม MQTT</h1>
+    <br />
+
+    <!-- # In your HTML file (index.html), you can display the MQTT data as follows: -->
+    <h1><span id="MqttData"></span></h1>
+
+    <!-- # Add this JavaScript code to your HTML file to update the displayed data: -->
+    <script>
+      function subscribeData() {
+        fetch("/subscribe")
+          .then((response) => {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw new Error("Network response was not ok");
+            }
+          })
+          .then((datas) => {
+            console.log(data);
+            document.getElementById("MqttData").textContent = `Light: ${data}%`;
+          })
+          .catch((error) => {
+            console.error("ข้อผิดพลาด:", error);
+          });
+      }
+      // Call the subscribeData function to update the data initially and then periodically
+      subscribeData();
+      setInterval(subscribeData, 5000); // Update data every 5 seconds
+    </script>
+
+    <br />
+  </center>
+  <br />
+  <hr />
+  <br />
+  <center>
+    <label class="switch">
+      <input type="checkbox" id="LedSwitch" onclick="publishData()" />
+      <!-- Set the initial value to "0" -->
+      <span class="slider"></span>
+    </label>
+    <br />
+    <br />
+    <p>LED State: <span id="ledState">Unknown</span></p>
+  </center>
+
+  <script>
+    $(document).ready(function () {
+      $("#LedSwitch").on("change", function () {
+        var newState = $(this).val() === "1" ? "0" : "1"; // Toggle the state
+
+        // Update the input's value to the new state
+        $(this).val(newState);
+      });
+    });
+  </script>
+
+  <!-- Bootstrap JS and jQuery (optional) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Add Bootstrap JavaScript (CDN or local) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function publishData() {
+      fetch("/publish")
+        .then((response) => response.text())
+        .then((data) => {
+          console.log(data);
+          document.getElementById("ledState").textContent = data;
+        })
+        .catch((error) => console.error("ข้อผิดพลาด:", error));
+    }
+  </script>
+</body>
