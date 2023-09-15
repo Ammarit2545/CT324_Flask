@@ -30,7 +30,7 @@ def on_connect(client, userdata, flags, rc):
         connected = True
         # Subscribe to the "/ARMTEST" topic when connected
         client.subscribe("/ARMTEST")
-        client.subscribe("/LIGHT")  # Subscribe to the "/LIGHT" topic
+        client.subscribe("/LIGHT")  # Subscribe to the "/LIGHT" topic Final
     else:
         print("Connection Failed")
 
