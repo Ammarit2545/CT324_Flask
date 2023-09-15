@@ -1,11 +1,10 @@
 from flask import Flask, render_template, jsonify, request
-from flask_socketio import SocketIO, emit
 import mysql.connector
 import paho.mqtt.client as mqttclient
 import time
+import json  # Added import
 
 app = Flask(__name__, static_url_path='/static')
-socketio = SocketIO(app)
 
 # Define your MySQL database configuration
 db_config = {
@@ -42,10 +41,10 @@ def on_message(client, userdata, message):
 
 
 connected = False
-broker_address = "10.22.5.149"
+broker_address = "45.136.239.169"
 port = 1883
-user = ""
-password = ""
+user = "dev"
+password = "cegn2023"
 
 client = mqttclient.Client("MQTT")
 client.username_pw_set(username=user, password=password)
@@ -61,15 +60,10 @@ while not connected:
 def index():
     return render_template('main.html')
 
+
 @app.route('/main')
 def main_page():
     return render_template('index.html')
-
-
-@socketio.on('connect')
-def handle_connect():
-    # This function is called when a client connects to the WebSocket
-    print('Client connected')
 
 
 led_state = "off"  # Initial LED state
@@ -96,11 +90,12 @@ def publish_led():
         data = (led_state,)
         db_cursor.execute(insert_query, data)
         db_connection.commit()
-        print("Data inserted into MySQL database successfully.")
+        app.logger.info("Data inserted into MySQL database successfully.")
     except Exception as e:
-        print(f"Error inserting data into MySQL database: {e}")
+        app.logger.error(f"Error inserting data into MySQL database: {e}")
 
     return f"Data sent to MQTT (LED state: {led_state})"
+
 
 # Define a callback function for receiving MQTT messages
 def on_mqtt_message(client, userdata, message):
@@ -116,27 +111,24 @@ def on_mqtt_message(client, userdata, message):
         value = data.get(key)
     except json.JSONDecodeError as e:
         # Handle JSON parsing errors
-        print(f"Error parsing MQTT data: {e}")
+        app.logger.error(f"Error parsing MQTT data: {e}")
         return
 
-    # Emit the MQTT data to all WebSocket clients
-    socketio.emit('mqtt_data', {'key': key, 'value': value})
+
+# Serve the HTML form at this route
+@app.route('/data_input_form', methods=['GET'])
+def data_input_form():
+    return render_template('data_input_form.html')
 
 
-# Create a connection to the MySQL database
-db_connection = mysql.connector.connect(**db_config)
-db_cursor = db_connection.cursor()
-
-# ... Your previous code ...
-
-@app.route('/insert_data', methods=['POST'])
+@app.route('/insert_data', methods=['GET'])
 def insert_data():
     try:
         sensor_value1 = request.form.get('sensor_value1')
         lux = request.form.get('lux')
 
         # Insert data into the database
-        insert_query = "INSERT INTO led_status (l_status, L_date_in) VALUES (%s, NOW())"
+        insert_query = "INSERT INTO data_detail (d_val_1, d_date_in) VALUES (%s, NOW())"
         data = (lux,)
 
         db_cursor.execute(insert_query, data)
@@ -144,7 +136,10 @@ def insert_data():
 
         return "Data inserted successfully.", 200
     except Exception as e:
+        app.logger.error(f"Error: {str(e)}")
         return f"Error: {str(e)}", 500
+
+    time.sleep(4)
 
 
 @app.route('/subscribe')
@@ -170,11 +165,12 @@ def subscribe_mqtt_data():
             return jsonify({"message": "Data inserted successfully."})
         except Exception as e:
             # Handle any errors that may occur during insertion
+            app.logger.error(f"Error inserting data into MySQL database: {e}")
             return jsonify({"error": str(e)}), 500
     else:
         # Handle the case when there is no MQTT data available
         return jsonify({"message": "No MQTT data available."})
 
+
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8000)
